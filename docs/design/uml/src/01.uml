@@ -1,1 +1,29 @@
+@startuml
+actor 用户
+participant 前端
+participant 后端
+participant "AI接口" as AI
 
+autonumber
+
+用户 -> 前端 : 提交输入信息
+activate 前端 #LightBlue
+
+前端 -> 前端 : 渲染用户界面
+前端 -> 后端 : 传递请求数据
+deactivate 前端
+
+activate 后端 #LightGreen
+后端 -> AI : 调用计算接口
+activate AI #Pink
+
+AI --> 后端 : 返回计算结果(JSON)
+deactivate AI
+
+后端 --> 前端 : 转发计算结果
+deactivate 后端
+
+activate 前端 #LightBlue
+前端 --> 用户 : 展示最终结果
+deactivate 前端
+@enduml
