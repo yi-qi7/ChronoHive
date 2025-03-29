@@ -5,4 +5,4 @@
 3.3正式建队
 
 # 框架
-![plantuml](https://github.com/user-attachments/assets/03e5eee4-442c-47b6-b214-a29ebb03f86b)
+![plantuml](docs/design/uml/image/框架流程.png)
