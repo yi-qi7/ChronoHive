@@ -9,7 +9,6 @@ autonumber
 用户 -> 前端 : 提交输入信息
 activate 前端 #LightBlue
 
-前端 -> 前端 : 渲染用户界面
 前端 -> 后端 : 传递请求数据
 deactivate 前端
 
@@ -24,6 +23,7 @@ deactivate AI
 deactivate 后端
 
 activate 前端 #LightBlue
+前端 -> 前端 : 渲染用户界面
 前端 --> 用户 : 展示最终结果
 deactivate 前端
 @enduml
