@@ -8,5 +8,7 @@
 
 3.29建立仓库 
 
+4.12开始逐步实现核心功能
+
 # 框架
 ![plantuml](docs/design/uml/image/plantuml.png)
