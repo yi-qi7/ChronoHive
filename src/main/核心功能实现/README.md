@@ -3,9 +3,8 @@
 ```mermaid
 graph LR
 A(用户输入日程) --> |txt|B(api调用)
-     B --> C(杂项处理 )
-     C --> E(显示日程)
-     F[横向流程图]
+     B --> |response_output.json| C(杂项处理 )
+     C --> |cleaned_schedule.json| E(显示日程)
  ```
 
 
