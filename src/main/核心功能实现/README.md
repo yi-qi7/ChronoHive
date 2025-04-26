@@ -7,9 +7,6 @@ A(用户输入日程) --> |txt|B(api调用)
      C --> |cleaned_schedule.json| E(显示日程)
  ```
 
-
-用户输入日程（txt） -> api调用 -> response_output.json -> 杂项处理 -> cleaned_schedule.json -> 显示日程
-
 ## 介绍
 
 在“核心功能实现”文件夹下，我们用python实现了api调用功能并且规定了json文件格式，成功在web端显示了我们的日程
