@@ -1,11 +1,11 @@
 ## 流程
 
-```mermaid
+
 graph LR
 A(用户输入日程) --> |txt|B(api调用)
      B --> |response_output.json| C(杂项处理 )
      C --> |cleaned_schedule.json| E(显示日程)
- ```
+
 
 ## 介绍
 
