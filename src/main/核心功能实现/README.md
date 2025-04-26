@@ -1,13 +1,14 @@
+## 流程
+
 ```mermaid
 graph LR
-A[方形] -->B(圆角)
-     B --> C{条件a}
-     C -->|a=1| D[结果1]
-     C -->|a=2| E[结果2]
+A(用户输入日程（txt）) -->B(api调用)
+     B --> C(杂项处理 )
+     C --> E(显示日程)
      F[横向流程图]
  ```
 
-## 流程
+
 
 用户输入日程（txt） -> api调用 -> response_output.json -> 杂项处理 -> cleaned_schedule.json -> 显示日程
 
