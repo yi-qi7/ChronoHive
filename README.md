@@ -8,5 +8,9 @@
 
 3.29建立仓库 
 
+4.12开始逐步实现核心功能
+
+4.25讨论确定分工
+
 # 框架
 ![plantuml](docs/design/uml/image/plantuml.png)
