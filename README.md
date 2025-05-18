@@ -13,4 +13,4 @@
 4.25讨论确定分工
 
 # 框架
-![plantuml](docs/design/uml/image/plantuml.png)
+![plantuml](docs/uml/image/plantuml.png)
