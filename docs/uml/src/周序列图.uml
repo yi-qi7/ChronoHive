@@ -77,5 +77,3 @@ activate WeekContainer #LightGreen
 deactivate WeekContainer
 deactivate WeekUI
 @enduml
-
-根据我的序列图uml代码对我的序列图进行详细描述
