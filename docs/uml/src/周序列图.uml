@@ -1,0 +1,81 @@
+@startuml
+actor User
+participant "WeekUI" as WeekUI
+participant "WeekContainer" as WeekContainer
+participant "DayContainer" as DayContainer
+participant "ScheduleItem" as ScheduleItem
+participant "Time" as Time
+participant "AI System" as AISystem
+
+activate WeekUI #LightBlue
+User -> WeekUI : 输入任务名称、时间、优先级等信息
+WeekUI -> WeekContainer : 创建周内容容器
+activate WeekContainer #LightGreen
+WeekContainer -> DayContainer : 获取当前日期的日程容器
+activate DayContainer #Pink
+DayContainer -> ScheduleItem : 添加日程项
+activate ScheduleItem #Purple
+ScheduleItem -> Time : 关联时间对象
+activate Time #Orange
+Time --> WeekUI : 显示
+deactivate Time
+deactivate ScheduleItem
+deactivate DayContainer
+deactivate WeekContainer
+
+
+User -> WeekUI : 触发AI生成日程请求
+WeekUI -> AISystem : askAI()
+activate AISystem #Yellow
+AISystem -> WeekContainer : 优化日程表
+deactivate AISystem
+activate WeekContainer #LightGreen
+WeekContainer -> DayContainer : 更新日程容器
+activate DayContainer #Pink
+DayContainer -> ScheduleItem : 更新日程项
+activate ScheduleItem #Purple
+ScheduleItem -> Time : 更新时间对象
+activate Time #Orange
+Time --> WeekUI : 显示
+deactivate Time
+deactivate ScheduleItem
+deactivate DayContainer
+deactivate WeekContainer
+
+User -> WeekUI : 手动调整日程
+WeekUI -> WeekContainer : 更新周视图
+activate WeekContainer #LightGreen
+WeekContainer -> DayContainer : 更新对应日期的日程项
+activate DayContainer #Pink
+DayContainer -> ScheduleItem : 修改任务的时长或删除任务
+activate ScheduleItem #Purple
+ScheduleItem -> Time : 更新时间对象
+activate Time #Orange
+Time --> WeekUI : 显示
+deactivate Time
+deactivate ScheduleItem
+deactivate DayContainer
+deactivate WeekContainer
+
+WeekContainer -> DayContainer : 检测并提示冲突
+activate DayContainer #Pink
+activate WeekContainer #LightGreen
+DayContainer -> ScheduleItem : 高亮显示冲突任务
+activate ScheduleItem #Purple
+ScheduleItem -> Time : 更新时间对象
+activate Time #Orange
+Time --> WeekUI : 显示
+deactivate Time
+deactivate ScheduleItem
+deactivate DayContainer
+deactivate WeekContainer
+
+User -> WeekUI : 导出日程
+WeekUI -> WeekContainer : 导出ICS文件或PDF格式
+activate WeekContainer #LightGreen
+
+deactivate WeekContainer
+deactivate WeekUI
+@enduml
+
+根据我的序列图uml代码对我的序列图进行详细描述
