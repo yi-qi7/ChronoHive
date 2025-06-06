@@ -1,4 +1,5 @@
 # 环境配置
+python版本不低于3.7
 
 安装依赖，用于api调用
 ```
@@ -10,6 +11,10 @@ pip install openai
 pip install flask 
 pip install flask-cors
 ```
+
+获取百炼API Key并在“后端api调用.py”中的13行替换为你的api key
+
+[百炼API Key获取](https://bailian.console.aliyun.com/?tab=model#/api-key)。新用户拥有免费token
 
 
 运行效果
