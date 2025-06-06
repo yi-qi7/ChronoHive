@@ -1,5 +1,5 @@
 # 环境配置
 
 
-<video src="前后端通讯精简示例.mp4" controls></video>
+[运行效果](../../../video/前后端通讯精简示例.gif)
 
