@@ -1,7 +1,7 @@
 ## 介绍
 实现了多agent的日程规划
 
-2agent.py是两个agent交互进行日程规划的版本，最终在终端输出日程规划json文件，而2agent_flask.py实现了两个agent在flask框架下与前端index.html消息通讯的版本的版本，更多信息参考数据交互
+2agent.py是两个agent交互进行日程规划的版本，最终在终端输出日程规划json文件，而2agent_flask.py实现了两个agent在flask框架下与前端index.html消息通讯的版本的版本，更多信息参考[数据交互](../前后端数据交互)
 
 同理，4agent实现了四个agent交互进行日程规划
 
