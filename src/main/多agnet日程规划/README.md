@@ -6,7 +6,7 @@
 同理，4agent实现了四个agent交互进行日程规划
 
 ## 环境配置
-python版本不低于3.7
+python版本不低于3.9(langgraph需要)
 
 安装依赖，用于api调用
 ```
@@ -25,6 +25,6 @@ pip install flask-cors
 
 安装LangGraph，LangGraph 是一个用于使用大型语言模型（LLMs）构建有状态、多参与者应用程序的库。
 ```
-pip install -U langgraph
+pip install langgraph
 ```
 
