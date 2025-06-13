@@ -1,4 +1,3 @@
-// MonthManager.js
 class MonthNumManager {
     constructor() {
       this.num_prevMonth = 6;
