@@ -30,3 +30,29 @@ flask run
 
 ## 运行效果
 ![运行效果](../../../video/前后端通讯精简示例.gif)
+
+
+## 数据传输
+使用了flask框架
+
+接收前端数据
+``` python
+from flask import Flask, request, jsonify
+...
+data = request.json
+user_input = data.get('text', '')
+```
+request.json 是 Flask 提供的便捷属性，用于解析请求体中的 JSON 数据。当客户端发送的请求满足以下条件时，该属性会自动将 JSON 数据解析为 Python 字典。用字典的 get() 方法从解析后的 JSON 数据中获取 text 字段的值
+
+发送json文件
+``` python
+ return jsonify({
+                # "status": "success",
+                "schedule": schedule_data,
+                #"raw_content": planner_response_content
+            }), 200
+```
+返回 HTTP 状态码 200（成功），响应体为 JSON，包含 schedule 字段（解析后的日程数据）
+
+
+
