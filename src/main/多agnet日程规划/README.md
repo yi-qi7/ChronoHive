@@ -28,3 +28,13 @@ pip install flask-cors
 pip install langgraph
 ```
 
+## 2agent
+一个负责估计任务量，另一个根据任务量安排日程
+
+## 4agent
+- 第一个从用户输入中提取用户需求
+- 第二个排列任务优先级
+- 第三个估计任务量
+- 第四个根据优先级和任务量安排日程
+
+
