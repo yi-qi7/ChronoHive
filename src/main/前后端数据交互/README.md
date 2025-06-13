@@ -57,8 +57,8 @@ request.json 是 Flask 提供的便捷属性，用于解析请求体中的 JSON 
 ## 数据传输-前端
 发送用户任务
 ``` html
-使用 Fetch API 发送 POST 请求到http://localhost:5000/api/generate_schedule：
-javascript
+// 使用 Fetch API 发送 POST 请求到http://localhost:5000/api/generate_schedule：
+
 const response = await fetch('http://localhost:5000/api/generate_schedule', {
     method: 'POST',
     headers: {
@@ -72,7 +72,7 @@ const response = await fetch('http://localhost:5000/api/generate_schedule', {
 
 接收后端json文件
 ``` html
-先验证请求是否成功（状态码 200-299）：
+// 先验证请求是否成功（状态码 200-299）：
 if (!response.ok) {
     throw new Error(`API请求失败，状态码: ${response.status}`);
 }
