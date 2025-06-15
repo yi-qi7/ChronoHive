@@ -30,3 +30,64 @@ flask run
 
 ## 运行效果
 ![运行效果](../../../video/前后端通讯精简示例.gif)
+
+
+## 数据传输-后端
+使用了flask框架
+
+接收前端数据
+``` python
+from flask import Flask, request, jsonify
+...
+data = request.json
+user_input = data.get('text', '')
+```
+request.json 是 Flask 提供的便捷属性，用于解析请求体中的 JSON 数据。当客户端发送的请求满足以下条件时，该属性会自动将 JSON 数据解析为 Python 字典。用字典的 get() 方法从解析后的 JSON 数据中获取 text 字段的值
+
+发送json文件
+``` python
+ return jsonify({
+                # "status": "success",
+                "schedule": schedule_data,
+                #"raw_content": planner_response_content
+            }), 200
+```
+返回 HTTP 状态码 200（成功），响应体为 JSON，包含 schedule 字段（解析后的日程数据）
+
+## 数据传输-前端
+发送用户任务
+``` java
+// 使用 Fetch API 发送 POST 请求到http://localhost:5000/api/generate_schedule：
+
+const response = await fetch('http://localhost:5000/api/generate_schedule', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json' // 声明发送JSON数据
+    },
+    body: JSON.stringify({
+        text: userInput // 将用户输入封装为{text: "输入内容"}
+    })
+});
+```
+
+接收后端json文件
+``` java
+// 先验证请求是否成功（状态码 200-299）：
+if (!response.ok) {
+    throw new Error(`API请求失败，状态码: ${response.status}`);
+}
+const data = await response.json(); // 解析JSON响应
+```
+
+成功时：将 JSON 结果格式化后显示在页面pre标签中
+``` java
+result.textContent = JSON.stringify(data, null, 2); // 2个空格缩进
+```
+
+错误时：显示错误信息
+``` java
+if (data.status === 'error') {
+    responseStatus.textContent = `错误: ${data.message}`;
+    responseStatus.style.display = 'block';
+}
+```
