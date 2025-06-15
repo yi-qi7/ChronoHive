@@ -1,0 +1,43 @@
+@startuml
+actor User
+
+() "显示周视图" as 显示周视图
+() "显示月视图" as 显示月视图
+
+database WeekContainer
+database MonthContainer
+database DayContainer
+database ScheduleItem
+database Time
+
+User --> 显示周视图 : 请求周数据
+显示周视图 --> User : 展示周视图
+
+显示周视图 --> WeekContainer : 读取周结构
+WeekContainer --> 显示周视图 : 周数据
+
+显示周视图 --> DayContainer : 查询每日数据
+DayContainer --> 显示周视图 : 返回天数据
+
+显示周视图 --> ScheduleItem : 获取日程项
+ScheduleItem --> 显示周视图 : 日程详情
+
+显示周视图 --> Time : 获取时间信息
+Time --> 显示周视图 : 时间数据
+
+' 月视图部分
+User --> 显示月视图 : 请求月数据
+显示月视图 --> User : 展示月视图
+
+显示月视图 --> MonthContainer : 读取月结构
+MonthContainer --> 显示月视图 : 月数据
+
+显示月视图 --> DayContainer : 查询每日数据
+DayContainer --> 显示月视图 : 返回天数据
+
+显示月视图 --> ScheduleItem : 获取日程项
+ScheduleItem --> 显示月视图 : 日程详情
+
+显示月视图 --> Time : 获取时间信息
+Time --> 显示月视图 : 时间数据
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+[*] --> Idle
+
+Idle --> AddingTask : 用户输入任务信息
+AddingTask --> TaskAdded : 任务信息验证通过
+TaskAdded --> WaitingForAI : 等待AI生成日程
+WaitingForAI --> AIProcessing : 系统调用AI生成日程
+AIProcessing --> AICompleted : AI生成完成
+AICompleted --> WaitingForUserAdjust : 用户手动调整
+WaitingForUserAdjust --> ManualAdjusting : 用户开始手动调整
+ManualAdjusting --> Adjusted : 日程调整完成
+Adjusted --> CheckingForConflicts : 系统检查冲突
+CheckingForConflicts --> NoConflicts : 无冲突
+NoConflicts --> ExportingSchedule : 用户导出日程
+ExportingSchedule --> ExportCompleted : 导出完成
+ExportCompleted -r-> Idle : 等待下一个日程
+
+CheckingForConflicts --> ConflictDetected : 检测到冲突
+ConflictDetected --> ConflictResolved : 用户解决冲突
+ConflictResolved --> WaitingForUserAdjust : 返回手动调整
+
+WaitingForUserAdjust --> RegenerateRequested : 用户请求重新生成
+RegenerateRequested --> AIProcessing : 重新调用AI生成日程
+
+@enduml

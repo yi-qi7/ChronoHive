@@ -1,0 +1,36 @@
+@startuml
+actor User
+actor System
+
+usecase "添加新日程条目" as UC1
+usecase "自动生成日程规划" as UC2
+usecase "手动调整日程" as UC3
+usecase "设置生成偏好" as UC4
+usecase "处理时间冲突" as UC5
+usecase "导出/同步日程" as UC6
+usecase "多场景生成模式" as UC7
+usecase "重新生成日程" as UC8
+usecase "查看日程详情" as UC9
+usecase "历史版本回溯" as UC10
+
+User --> UC1
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+User --> UC8
+User --> UC9
+User --> UC10
+
+System --> UC2
+System --> UC5
+System --> UC7
+
+UC1 .up.> UC2 : 扩展场景
+UC3 .down.> UC5 : 扩展场景
+UC2 .down.> UC8 : 异常流程
+UC5 .down.> UC4 : 扩展场景
+UC6 .down.> UC9 : 支持按类别筛选
+
+@enduml
