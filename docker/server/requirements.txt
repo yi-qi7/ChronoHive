@@ -1,0 +1,8 @@
+flask>=2.0.0
+flask-cors>=3.0.0
+langchain-core>=0.1.0
+langchain>=0.1.0
+typing-extensions>=4.0.0
+openai>=1.0.0    # 如用OpenAI API可加
+qianfan>=0.4.0   # 如用千帆Qwen可加
+# gunicorn         # 如果用gunicorn部署可加

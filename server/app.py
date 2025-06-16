@@ -4,6 +4,9 @@ from agents import ScheduleState
 from workflow import build_schedule_graph
 from utils import extract_json, fix_json
 import json
+# db
+from db import init_db, save_user_json, get_user_json 
+
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -11,6 +14,10 @@ CORS(app, supports_credentials=True)
 # 1. 初始化AI模型、智能体
 # 2. 图/流程初始化
 # 3. 路由定义
+
+# 初始化数据库
+with app.app_context():
+    init_db()
 
 graph_initialized = False
 schedule_graph = None
@@ -90,6 +97,38 @@ def generate_schedule():
             "raw_content": planner_response_content[:500]
         }), 500
 
+@app.route('/api/save_user_json', methods=['POST'])
+def save_user_json_route():
+    """
+    接收json，包含用户名和内容
+    {
+        "username": "alice",
+        "data": { ... }   # 你需要存什么都可以
+    }
+    """
+    try:
+        req = request.get_json()
+        username = req.get('username')
+        data = req.get('data')
+        if not username or not data:
+            return jsonify({"error": "username and data required"}), 400
+        save_user_json(username, data)
+        return jsonify({"status": "ok"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/get_user_json', methods=['GET'])
+def get_user_json_route():
+    """
+    查询用户所有json（latest first）
+    GET /api/get_user_json?username=alice
+    """
+    username = request.args.get('username')
+    if not username:
+        return jsonify({"error": "username required"}), 400
+    rows = get_user_json(username)
+    return jsonify({"data": rows})
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', port=5000)
     initialize_graph()
