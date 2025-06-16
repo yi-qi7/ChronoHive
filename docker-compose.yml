@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  backend:
+    build: ./docker/server
+    volumes:
+      - ./server:/app
+    environment:
+      - OPENAI_API_KEY=your_openai_api_key
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=mydb
+    ports:
+      - "5000:5000"

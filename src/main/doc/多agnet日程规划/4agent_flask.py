@@ -597,6 +597,7 @@ def build_schedule_graph() -> Graph:
     
     return workflow.compile()
 
+
 # 初始化图
 graph_initialized = False
 schedule_graph = None
