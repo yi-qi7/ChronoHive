@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import WeekCalendar from './WeekUI/WeekCalendar';
@@ -11,17 +12,17 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
-const APINavigator = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen 
-        name="APICallScreen" 
-        component={APICallScreen} 
-        options={{ title: 'API 调用界面' }} 
-      />
-    </Stack.Navigator>
-  );
-};
+// const APINavigator = () => {
+//   return (
+//     <Stack.Navigator>
+//       <Stack.Screen 
+//         name="APICallScreen" 
+//         component={() => <APICallScreen onAddSchedules={onAddSchedules} />}  // 正确传递 prop
+//         options={{ title: 'API 调用界面' }} 
+//       />
+//     </Stack.Navigator>
+//   );
+// };
 
 const App = () => {
   const [currentView, setCurrentView] = useState('calendar');
@@ -139,6 +140,37 @@ const App = () => {
     setIsAPIScreenVisible(false); // 隐藏 API 界面
   };
 
+  // 生成时间戳+随机数的唯一ID,只用时间戳生成时间太快会重复
+  const generateUniqueId = () => {
+    const timestamp = Date.now();
+    const randomNum = Math.floor(Math.random() * 1000); // 生成0-999的随机数
+    return `${timestamp}-${randomNum}`;
+  };
+
+  // 实现 onAddSchedules 函数
+  const onAddSchedules = (schedules) => {
+    const updatedEvents = {...events};
+    schedules.forEach((schedule) => {
+      const dateKey = dayjs(currentWeek).format('YYYY-MM-DD'); // 假设使用当前周的日期
+      const eventKey = `${schedule.start_time}-${schedule.end_time}`;
+      if (!updatedEvents[dateKey]) {
+        updatedEvents[dateKey] = {};
+      }
+      updatedEvents[dateKey][eventKey] = {
+        id:  generateUniqueId(), // 使用时间戳+随机数生成唯一ID
+        title: schedule.task,
+        type: '默认',
+        date: dateKey,
+        startTime: schedule.start_time,
+        endTime: schedule.end_time,
+        location: '',
+        description: schedule.reason
+      };
+    });
+    setEvents(updatedEvents);
+    setIsAPIScreenVisible(false); // 隐藏 API 界面
+  };
+
   return (
     <View style={{ flex: 1 }}>
       {/* 原有条件渲染：日历和表单页 */}
@@ -174,7 +206,13 @@ const App = () => {
       {/* 局部导航容器：仅用于 API 页跳转 */}
       {isAPIScreenVisible && (
         <NavigationContainer independent={true} onStateChange={goBackFromAPIScreen}>
-          <APINavigator />
+          <Stack.Navigator>
+            <Stack.Screen 
+              name="APICallScreen" 
+              component={() => <APICallScreen onAddSchedules={onAddSchedules} />} 
+              options={{ title: 'API 调用界面' }} 
+            />
+          </Stack.Navigator>
         </NavigationContainer>
       )}
     </View>
