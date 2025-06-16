@@ -1,5 +1,4 @@
-// src/components/WeekCalendar.js
-// src/components/WeekCalendar.js
+
 import React, { useState, useEffect } from 'react';
 import { 
   SafeAreaView, 

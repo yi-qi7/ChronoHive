@@ -1,13 +1,14 @@
+
 import React, { useState } from 'react';
 import { SafeAreaView, TextInput, StyleSheet, Text, Button, ActivityIndicator } from 'react-native';
 
-const APICallScreen = () => {
+const APICallScreen = ({ onAddSchedules }) => {
   const [inputText, setInputText] = useState('');
   const [responseData, setResponseData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-   const generateSchedule = async () => {
+  const generateSchedule = async () => {
     setIsLoading(true);
     setError(null);
     setResponseData(null);
@@ -34,6 +35,8 @@ const APICallScreen = () => {
 
       const data = await response.json();
       setResponseData(data);
+      // 调用父组件的函数添加日程
+      onAddSchedules(data.schedule.schedule);
     } catch (err) {
       setError(err.message);
     } finally {
