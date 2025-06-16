@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>周日程表</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+        .container {
+            display: flex;
+            padding: 20px;
+        }
+        .time-axis {
+            width: 80px;
+            font-size: 14px;
+            padding-right: 10px;
+            text-align: center;
+            background-color: #d6d5d5;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 10px;
+            width: 100%;
+            position: relative;
+        }
+        .task {
+            background-color: #4CAF50;
+            color: rgb(255, 255, 255);
+            border-radius: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            margin: 0px;
+            position: relative;
+        }
+        .task-header {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .task-time {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .task-description {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .task.break {
+            background-color: #FF9800;
+        }
+        .task.rest {
+            background-color: #03A9F4;
+        }
+        .task.exercise {
+            background-color: #9C27B0;
+        }
+        .task.game {
+            background-color: #2196F3;
+        }
+        .task .time-block {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .time-block::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: inherit;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Time Axis -->
+    <div class="time-axis">
+        <div style="height: 60px;">09:00</div>
+        <div style="height: 60px;">10:00</div>
+        <div style="height: 60px;">11:00</div>
+        <div style="height: 60px;">12:00</div>
+        <div style="height: 60px;">13:00</div>
+        <div style="height: 60px;">14:00</div>
+        <div style="height: 60px;">15:00</div>
+        <div style="height: 60px;">16:00</div>
+        <div style="height: 60px;">17:00</div>
+        <div style="height: 60px;">18:00</div>
+    </div>
+
+    <!-- Calendar -->
+    <div class="calendar">
+        <!-- Task 1: Software Engineering Assignment -->
+        <div class="task" style="height: 180px;">
+            <div class="task-header">完成软件工程作业</div>
+            <div class="task-time">09:00 - 12:00</div>
+            <div class="task-description">集中完成软件工程相关的作业任务，确保提交。</div>
+            <div class="time-block" style="height: 180px;"></div>
+        </div>
+        <!-- Task 2: Lunch Break -->
+        <div class="task break" style="height: 60px;">
+            <div class="task-header">午餐休息</div>
+            <div class="task-time">12:00 - 13:00</div>
+            <div class="task-description">享受午餐，稍作休息。</div>
+            <div class="time-block" style="height: 60px;"></div>
+        </div>
+        <!-- Task 3: Learn PCB Design -->
+        <div class="task" style="height: 120px;">
+            <div class="task-header">学习PCB设计</div>
+            <div class="task-time">13:00 - 15:00</div>
+            <div class="task-description">学习基础的PCB设计原理和应用。</div>
+            <div class="time-block" style="height: 120px;"></div>
+        </div>
+        <!-- Task 4: Running -->
+        <div class="task exercise" style="height: 30px;">
+            <div class="task-header">跑步3km</div>
+            <div class="task-time">15:30 - 16:00</div>
+            <div class="task-description">进行轻松跑步，保持身体健康。</div>
+            <div class="time-block" style="height: 30px;"></div>
+        </div>
+        <!-- Task 5: Playing Games -->
+        <div class="task game" style="height: 120px;">
+            <div class="task-header">打游戏2小时</div>
+            <div class="task-time">16:30 - 18:30</div>
+            <div class="task-description">放松心情，享受游戏时光。</div>
+            <div class="time-block" style="height: 120px;"></div>
+        </div>
+        <!-- Task 6: Dinner and Rest -->
+        <div class="task rest" style="height: 60px;">
+            <div class="task-header">晚餐及休息</div>
+            <div class="task-time">18:30 - 19:30</div>
+            <div class="task-description">享受晚餐，稍作休息。</div>
+            <div class="time-block" style="height: 60px;"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
