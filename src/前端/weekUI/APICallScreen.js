@@ -1,12 +1,15 @@
 
+
+import { View } from 'react-native';
 import React, { useState } from 'react';
-import { SafeAreaView, TextInput, StyleSheet, Text, Button, ActivityIndicator } from 'react-native';
+import { SafeAreaView, TextInput, StyleSheet, Text, Button, ActivityIndicator, TouchableOpacity } from 'react-native';
 
 const APICallScreen = ({ onAddSchedules }) => {
   const [inputText, setInputText] = useState('');
   const [responseData, setResponseData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedButton, setSelectedButton] = useState(1); // 初始默认选中按钮1
 
   const generateSchedule = async () => {
     setIsLoading(true);
@@ -35,12 +38,18 @@ const APICallScreen = ({ onAddSchedules }) => {
 
       const data = await response.json();
       setResponseData(data);
-      // 调用父组件的函数添加日程
       onAddSchedules(data.schedule.schedule);
     } catch (err) {
       setError(err.message);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // 按钮点击处理函数（防止取消选中）
+  const handleButtonPress = (buttonValue) => {
+    if (buttonValue !== selectedButton) { // 仅当点击非当前选中按钮时切换
+      setSelectedButton(buttonValue);
     }
   };
 
@@ -53,6 +62,53 @@ const APICallScreen = ({ onAddSchedules }) => {
         value={inputText}
         onChangeText={(text) => setInputText(text)}
       />
+
+      {/* agent数目说明文字 */}
+      <Text style={styles.agentLabel}>agent数目：</Text>
+      
+      {/* 按钮组 - 水平排列4个按钮 */}
+      <View style={styles.buttonGroup}>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            selectedButton === 1 ? styles.buttonSelected : styles.buttonUnselected
+          ]}
+          onPress={() => handleButtonPress(1)}
+        >
+          <Text style={styles.buttonText}>1</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          style={[
+            styles.button,
+            selectedButton === 2 ? styles.buttonSelected : styles.buttonUnselected
+          ]}
+          onPress={() => handleButtonPress(2)}
+        >
+          <Text style={styles.buttonText}>2</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          style={[
+            styles.button,
+            selectedButton === 4 ? styles.buttonSelected : styles.buttonUnselected
+          ]}
+          onPress={() => handleButtonPress(4)}
+        >
+          <Text style={styles.buttonText}>4</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          style={[
+            styles.button,
+            selectedButton === 5 ? styles.buttonSelected : styles.buttonUnselected
+          ]}
+          onPress={() => handleButtonPress(5)}
+        >
+          <Text style={styles.buttonText}>5</Text>
+        </TouchableOpacity>
+      </View>
+      
       <Button
         title={isLoading ? '处理中...' : '生成日程'}
         onPress={generateSchedule}
@@ -97,6 +153,30 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 4,
     fontFamily: 'Courier New, monospace',
+  },
+  // 按钮相关样式
+  buttonGroup: {
+    flexDirection: 'row',       // 水平排列
+    justifyContent: 'space-between', // 均匀分布
+    marginVertical: 10,
+  },
+  button: {
+    flex: 1,                    // 等宽
+    height: 40,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 15,        // 按钮间间距
+  },
+  buttonSelected: {
+    backgroundColor: '#1890ff', // 选中时蓝色背景
+  },
+  buttonUnselected: {
+    backgroundColor: '#e8e8e8', // 未选中时浅灰色背景
+  },
+  buttonText: {
+    color: 'white',             // 文字颜色
+    fontSize: 16,
   },
 });
 
