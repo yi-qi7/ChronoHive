@@ -1,4 +1,5 @@
 // src/components/WeekCalendar.js
+// src/components/WeekCalendar.js
 import React, { useState, useEffect } from 'react';
 import { 
   SafeAreaView, 
@@ -16,7 +17,7 @@ import dayjs from 'dayjs';
 
 const { width, height } = Dimensions.get('window');
 
-const WeekCalendar = ({ events, onAddEvent, onEditEvent, onDeleteEvent, currentWeek, setCurrentWeek }) => {
+const WeekCalendar = ({ events, onAddEvent, onEditEvent, onDeleteEvent, currentWeek, setCurrentWeek , onNavigateToAPI, isAPIScreenVisible}) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [weekDays, setWeekDays] = useState([]);
@@ -210,6 +211,10 @@ const WeekCalendar = ({ events, onAddEvent, onEditEvent, onDeleteEvent, currentW
             <TouchableOpacity style={styles.actionBtn} onPress={goToNextWeek}>
               <Text style={styles.actionText}>→</Text>
             </TouchableOpacity>
+            {/* **新增的API调用按钮** */}
+            <TouchableOpacity style={styles.actionBtn} onPress={() => onNavigateToAPI(isAPIScreenVisible)}>
+              <Text style={styles.actionText}>API</Text>
+            </TouchableOpacity>
           </View>
         </View>
         
@@ -312,7 +317,7 @@ const WeekCalendar = ({ events, onAddEvent, onEditEvent, onDeleteEvent, currentW
               </View>
               
               {/* 操作按钮 */}
-              <View style={styles.modalButtons}>
+              <View style={styles.actionButtons}>
                 <TouchableOpacity 
                   style={styles.deleteButton}
                   onPress={handleDeleteEvent}
