@@ -277,14 +277,16 @@ class SingleMonth extends Component {
                 onChangeText={(text) => this.setState({ newTask: text })}
                 allowFontScaling={true} // 允许字体缩放
                 autoCorrect={false} // 关闭自动纠错
-                //keyboardType="default" // 默认键盘类型
-                keyboardType="visible-password" // 使用 visible-password 类型以支持中文输入
+                keyboardType="default" // 默认键盘类型
+                //keyboardType="visible-password" // 使用 visible-password 类型以支持中文输入
+                //keyboardType="url"
                 returnKeyType="done" // 完成键
                 enablesReturnKeyAutomatically={true} // 自动启用完成键
               />
-              <Button
+              <ModeButton
                 title="添加任务"
                 onPress={() => this.addTask(selectedDate, newTask)}
+                buttonMode = {mode}
               />
             </View>
             {tasksForSelectedDate.length === 0 ? (
@@ -313,9 +315,10 @@ class SingleMonth extends Component {
                       (mode === 'dark') && styles.darkModalItemDeadline,
                       (mode === 'honeycomb') && styles.honeycombModalItemDeadline,
                     ]}>截止日期：{selectedDate}</Text>*/}
-                    <Button
+                    <ModeButton
                       title="删除"
                       onPress={() => this.confirmRemoveTask(selectedDate, item)}
+                      buttonMode = {mode}
                     />
                   </View>
                 )}
