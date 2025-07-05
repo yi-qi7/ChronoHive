@@ -58,40 +58,90 @@ const App = () => {
 
   const [isAPIScreenVisible, setIsAPIScreenVisible] = useState(false); // 新增状态来控制 API 界面的显示
 
-  // 处理保存日程
+  // 处理保存日程（添加了时间冲突检测）
   const handleSaveEvent = (newEvent, mode) => {
+    // 转换时间格式为分钟数
+    const convertToMinutes = (timeStr) => {
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      return hours * 60 + minutes;
+    };
+    
+    const newStart = convertToMinutes(newEvent.startTime);
+    const newEnd = convertToMinutes(newEvent.endTime);
+    
+    // 检查时间冲突
+    const hasTimeConflict = () => {
+      const currentDateEvents = events[newEvent.date] || {};
+      
+      for (const eventKey in currentDateEvents) {
+        const existingEvent = currentDateEvents[eventKey];
+        
+        // 在编辑模式下，跳过当前正在编辑的日程
+        if (mode === 'edit' && existingEvent.id === selectedEvent.id) {
+          continue;
+        }
+        
+        const existingStart = convertToMinutes(existingEvent.startTime);
+        const existingEnd = convertToMinutes(existingEvent.endTime);
+        
+        // 检查时间重叠：新日程的开始时间在已有日程时间段内，或新日程的结束时间在已有日程时间段内
+        if ((newStart >= existingStart && newStart < existingEnd) || 
+            (newEnd > existingStart && newEnd <= existingEnd) ||
+            (newStart <= existingStart && newEnd >= existingEnd)) {
+          return {
+            conflict: true,
+            existingEvent
+          };
+        }
+      }
+      
+      return { conflict: false };
+    };
+    
+    // 检查冲突
+    const conflictResult = hasTimeConflict();
+    if (conflictResult.conflict) {
+      Alert.alert(
+        "时间冲突", 
+        `该时间段与"${conflictResult.existingEvent.title}"日程冲突，请调整时间`,
+        [{ text: "确定" }]
+      );
+      return;
+    }
+    
+    // 没有冲突，继续保存流程
     const updatedEvents = {...events};
-
+    
     // 处理编辑模式，先删除旧的日程
     if (mode === 'edit') {
       const dateKey = selectedEvent.date;
       const eventKey = `${selectedEvent.startTime}-${selectedEvent.endTime}`;
-
+      
       if (updatedEvents[dateKey] && updatedEvents[dateKey][eventKey]) {
         delete updatedEvents[dateKey][eventKey];
-
+        
         if (Object.keys(updatedEvents[dateKey]).length === 0) {
           delete updatedEvents[dateKey];
         }
       }
     }
-
+    
     // 添加新日程
     const dateKey = newEvent.date;
     const eventKey = `${newEvent.startTime}-${newEvent.endTime}`;
-
+    
     if (!updatedEvents[dateKey]) {
       updatedEvents[dateKey] = {};
     }
-
+    
     updatedEvents[dateKey][eventKey] = {
       ...newEvent,
       id: mode === 'edit' ? selectedEvent.id : Date.now().toString()
     };
-
+    
     setEvents(updatedEvents);
     setCurrentView('calendar');
-
+    
     Alert.alert(
       "日程保存成功", 
       mode === 'edit' 
@@ -99,7 +149,7 @@ const App = () => {
         : `"${newEvent.title}"日程已创建`,
       [{ text: "确定" }]
     );
-
+    
     setSelectedEvent(null);
   };
 
