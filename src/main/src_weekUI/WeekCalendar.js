@@ -211,10 +211,10 @@ const WeekCalendar = ({ events, onAddEvent, onEditEvent, onDeleteEvent, currentW
             <TouchableOpacity style={styles.actionBtn} onPress={goToNextWeek}>
               <Text style={styles.actionText}>→</Text>
             </TouchableOpacity>
-            {/* **新增的API调用按钮** */}
-            <TouchableOpacity style={styles.actionBtn} onPress={() => onNavigateToAPI(isAPIScreenVisible)}>
+            
+            {/* <TouchableOpacity style={styles.actionBtn} onPress={() => onNavigateToAPI(isAPIScreenVisible)}>
               <Text style={styles.actionText}>API</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
         
