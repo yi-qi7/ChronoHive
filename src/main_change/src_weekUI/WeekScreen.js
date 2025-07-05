@@ -14,16 +14,37 @@ const Stack = createNativeStackNavigator();
 class WeekUI extends React.Component {
   constructor(props) {
     super(props);
+    const { route } = props;
+    const initialDate = route?.params?.date|| dayjs();
+    
+    this.updateWeekFromParams(props.route.params);
     this.state = {
       currentView: 'calendar',
       selectedEvent: null,
       formMode: 'create',
-      currentWeek: dayjs(),
+      // currentWeek: dayjs(),
+      currentWeek: dayjs(initialDate), // 使用传递过来的日期或当前日期
       events: eventsData,//从json文件里读取数据
       isAPIScreenVisible: false
     };
     this.unsubscribe = null; // 用于保存导航事件的卸载函数
   }
+
+  // constructor(props) {
+  //   super(props);
+  //   this.updateWeekFromParams(props.route.params);
+  // }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.route.params?.date !== prevProps.route.params?.date) {
+      this.updateWeekFromParams(this.props.route.params);
+    }
+  }
+
+  updateWeekFromParams = (params) => {
+    const initialDate = params?.date ? dayjs(params.date) : dayjs();
+    this.setState({ currentWeek: initialDate });
+  };
 
 //  // 组件挂载后，添加导航焦点监听
 //   componentDidMount() {

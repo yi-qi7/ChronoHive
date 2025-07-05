@@ -25,10 +25,14 @@ function MainTabs(){
       tabBar={props=> <TabBar {...props}/>}
       screenOptions={{
         headerShown: false, // 设为 false 隐藏所有屏幕的标题栏
+        unmountOnBlur: true // 强制标签页切换时重新渲染
       }}
     >
       <Tab.Screen name="Calendar" component={Calendar} />
-      <Tab.Screen name="SingleMonth" component={SingleMonth} /> 
+      {/* <Tab.Screen name="SingleMonth" component={SingleMonth} />  */}
+      <Tab.Screen name="SingleMonth">
+        {props => <SingleMonth {...props} rootNavigation={navigation} />}
+      </Tab.Screen>
       
       {/* 周视图要特殊处理：显示标题栏，并在标题栏增加返回键*/}
       <Tab.Screen 

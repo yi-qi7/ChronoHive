@@ -8,6 +8,17 @@ import { mockLocalStorage } from './mockLocalStorage'; //测试用单例
 import { ScheduleColorMapper } from './scheduleTypeColorMapper' //测试用单例
 import {getTasksByDate} from './mockDeadlineStorage'; //测试用单例
 import ModeButton from './modeButton'
+// import { withNavigation } from '@react-navigation/native';
+
+import { useNavigation } from '@react-navigation/native';
+
+// 创建一个高阶组件包装器
+function withNavigation(Component) {
+  return function WrappedComponent(props) {
+    const navigation = useNavigation();
+    return <Component {...props} navigation={navigation} />;
+  }
+}
 
 dayjs.extend(isLeapYear);
 
@@ -327,6 +338,7 @@ class SingleMonth extends Component {
       // 日程模式：跳转到周视图
       this.props.navigation.navigate('WeekView', {
         date: formattedDate,
+        forceRefresh: Date.now(), // 添加时间戳强制刷新
         scheduleMethods: this.state.scheduleMethods,
         isDeadlineMode: this.state.isDeadlineMode
       });
@@ -685,4 +697,5 @@ const styles = StyleSheet.create({
 
 // --------------------- 导出组件及测试工具 --------------------- //
 export { SingleMonth };
-export default SingleMonth;
+// export default SingleMonth;
+export default withNavigation(SingleMonth);
