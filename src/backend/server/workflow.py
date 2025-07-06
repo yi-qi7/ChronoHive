@@ -11,6 +11,8 @@ from langchain_core.messages import HumanMessage
 from agents import ScheduleAgent, ScheduleState, model, user_intent, task_analyst, task_estimator, time_planner, task_evaluate
 # 2. 节点函数
 
+planner_response_content = "" # 定义全局变量字符串储存最后的值
+
 # 定义节点函数
 def intent_node(state: ScheduleState, agent: ScheduleAgent) -> Dict:
     """用户需求解析专家节点处理函数"""

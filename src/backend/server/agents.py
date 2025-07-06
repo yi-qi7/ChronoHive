@@ -2,8 +2,6 @@ from typing import List, Dict, TypedDict
 from langchain_openai import ChatOpenAI
 import os
 
-planner_response_content = "" # 定义全局变量字符串储存最后的值
-
 # 配置模型
 model = ChatOpenAI(
     model="qwen-turbo",
@@ -99,7 +97,6 @@ class ScheduleAgent:
 根据上述信息完成你的工作。
 """
 
-planner_response_content = "" # 定义全局变量字符串储存最后的值
 
 # 用户需求解析专家
 user_intent = ScheduleAgent(

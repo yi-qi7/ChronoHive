@@ -2,11 +2,13 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from agents import ScheduleState
 from workflow import build_schedule_graph
+import workflow
 from utils import extract_json, fix_json
 import json
 # db
 from db import init_db, save_user_json, get_user_json , init_user_db, create_user, get_user
 from flask import send_from_directory
+
 
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
@@ -48,12 +50,11 @@ def download_apk():
 # 主函数
 @app.route('/api/generate_schedule', methods=['POST'])
 def generate_schedule():
-    global planner_response_content
-    
+
     try:
         data = request.json
         user_input = data.get('text', '')
-
+    
         if not user_input:
             return jsonify({"error": "缺少text参数"}), 400
         
@@ -80,12 +81,12 @@ def generate_schedule():
         
         # 确保全局变量已更新
         if final_state and "schedule_result" in final_state:
-            planner_response_content = final_state["schedule_result"]
+            workflow.planner_response_content = final_state["schedule_result"]
 
         # 尝试解析全局变量为JSON
         try:
             # 提取并修复JSON
-            json_part = extract_json(planner_response_content)
+            json_part = extract_json(workflow.planner_response_content)
             fixed_json = fix_json(json_part)
             schedule_data = json.loads(fixed_json)
             
@@ -99,14 +100,14 @@ def generate_schedule():
             return jsonify({
                 "status": "error",
                 "message": f"解析结果失败: {str(e)}",
-                "raw_content": planner_response_content[:500]
+                "raw_content": workflow.planner_response_content[:500]
             }), 500
         
     except Exception as e:
         return jsonify({
             "status": "error",
             "message": str(e),
-            "raw_content": planner_response_content[:500]
+            "raw_content": workflow.planner_response_content[:500]
         }), 500
 
 @app.route('/api/save_user_json', methods=['POST'])
