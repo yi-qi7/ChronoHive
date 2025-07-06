@@ -206,7 +206,7 @@ const APICallScreen = () => {
         throw new Error('请输入任务描述');
       }
 
-      const response = await fetch('http://172.19.78.145:5000/api/generate_schedule', {
+      const response = await fetch('http://192.168.1.8:5000/api/generate_schedule', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
