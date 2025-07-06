@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from agents import ScheduleState
 from workflow import build_schedule_graph
-import workflow
+import agents
 from utils import extract_json, fix_json
 import json
 # db
@@ -81,12 +81,12 @@ def generate_schedule():
         
         # 确保全局变量已更新
         if final_state and "schedule_result" in final_state:
-            workflow.planner_response_content = final_state["schedule_result"]
+            agents.planner_response_content = final_state["schedule_result"]
 
         # 尝试解析全局变量为JSON
         try:
             # 提取并修复JSON
-            text = workflow.planner_response_content
+            text = agents.planner_response_content
             json_part = extract_json(text)
             fixed_json = fix_json(json_part)
             schedule_data = json.loads(fixed_json)
@@ -101,14 +101,14 @@ def generate_schedule():
             return jsonify({
                 "status": "error",
                 "message": f"解析结果失败: {str(e)}",
-                "raw_content": workflow.planner_response_content[:500]
+                "raw_content": agents.planner_response_content[:500]
             }), 500
         
     except Exception as e:
         return jsonify({
             "status": "error",
             "message": str(e),
-            "raw_content": workflow.planner_response_content[:500]
+            "raw_content": agents.planner_response_content[:500]
         }), 500
 
 @app.route('/api/save_user_json', methods=['POST'])

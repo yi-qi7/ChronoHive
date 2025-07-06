@@ -11,7 +11,7 @@ from langchain_core.messages import HumanMessage
 from agents import ScheduleAgent, ScheduleState, model, user_intent, task_analyst, task_estimator, time_planner, task_evaluate
 # 2. 节点函数
 
-planner_response_content = "" # 定义全局变量字符串储存最后的值
+import agents
 
 # 定义节点函数
 def intent_node(state: ScheduleState, agent: ScheduleAgent) -> Dict:
@@ -322,8 +322,7 @@ def planner_node(state: ScheduleState, agent: ScheduleAgent) -> Dict:
     state["schedule_result"] = response.content
 
     # 将response.content赋值给全局变量
-    global planner_response_content
-    planner_response_content = response.content
+    agents.planner_response_content = response.content
     
     # print(f"\n{agent.name}: {response.content}")
     # 完成安排后结束流程
@@ -419,8 +418,7 @@ def value_node(state: ScheduleState, agent: ScheduleAgent) -> Dict:
     state["schedule_result"] = response.content
 
     # 将response.content赋值给全局变量
-    global planner_response_content
-    planner_response_content = response.content
+    agents.planner_response_content = response.content
     
     # print(f"\n{agent.name}: {response.content}")
     # 完成安排后结束流程

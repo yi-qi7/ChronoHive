@@ -1,7 +1,8 @@
 from typing import List, Dict, TypedDict
 from langchain_openai import ChatOpenAI
 import os
-import workflow
+
+planner_response_content = "" # 定义全局变量字符串储存最后的值
 
 # 配置模型
 model = ChatOpenAI(
@@ -83,7 +84,7 @@ class ScheduleAgent:
     
     # 构建日程评价的上下文
     def get_value_context(self, state: ScheduleState) -> str:
-        input_str = workflow.planner_response_content 
+        input_str = planner_response_content 
         memory_str = "\n".join([f"{m['content']}" for m in self.memory[-3:]])
         
         return f"""
