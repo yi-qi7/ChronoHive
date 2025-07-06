@@ -30,7 +30,7 @@ class APICallScreen extends Component {
         throw new Error('请输入任务描述');
       }
 
-      const response = await fetch('http://localhost:5000/api/generate_schedule', {
+      const response = await fetch('http://8.138.161.200:5000/api/generate_schedule', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
