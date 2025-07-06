@@ -16,7 +16,7 @@ CORS(app, supports_credentials=True)
 model = ChatOpenAI(
     model="qwen-turbo",
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
-    api_key=os.environ.get("OPENAI_API_KEY", "sk-90219972706f4202911eeae13b1ce835"),
+    api_key=os.environ.get("OPENAI_API_KEY", "？？？？"),
     temperature=0.7
 )
 
