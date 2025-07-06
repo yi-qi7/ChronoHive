@@ -86,7 +86,8 @@ def generate_schedule():
         # 尝试解析全局变量为JSON
         try:
             # 提取并修复JSON
-            json_part = extract_json(workflow.planner_response_content)
+            text = workflow.planner_response_content
+            json_part = extract_json(text)
             fixed_json = fix_json(json_part)
             schedule_data = json.loads(fixed_json)
             
