@@ -3,7 +3,7 @@ from typing import Dict
 import json
 import re
 from utils import extract_json, fix_json
-from langgraph.graph import Graph, StateGraph
+from langgraph.graph import StateGraph
 
 from langchain_core.messages import HumanMessage
 
@@ -427,7 +427,7 @@ def value_node(state: ScheduleState, agent: ScheduleAgent) -> Dict:
 # 3. 构建任务流图
 
 # 构建图
-def build_schedule_graph() -> Graph:
+def build_schedule_graph():
     """构建日程规划流程图"""
     workflow = StateGraph(ScheduleState)
     
