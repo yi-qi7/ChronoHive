@@ -12,7 +12,7 @@ from langchain_core.tools import tool
 model = ChatOpenAI(
     model="qwen-turbo",
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
-    api_key="sk-90219972706f4202911eeae13b1ce835",
+    api_key="？？？",
     temperature=0.7
 )
 
