@@ -34,6 +34,11 @@
 ## 框架
 ![plantuml](docs/uml/image/流程图.png)
 
+## 工作量展示
+![alt text](imgs/代码函展示.png)
+
+如图所示，在我们的主分支中共有12K+LOC
+
 
 ## ChronoHive 后端简介
 
