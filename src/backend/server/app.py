@@ -9,7 +9,7 @@ from db import init_db, save_user_json, get_user_json , init_user_db, create_use
 from flask import send_from_directory
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app, supports_credentials=True)
 
 
@@ -38,9 +38,12 @@ def hello_message():
 
 @app.route('/download_apk', methods=['GET'])
 def download_apk():
-    return send_from_directory('static', 'chrono_hive.apk', 
-                              as_attachment=True, 
-                              mimetype='static/app-debug.apk')
+    return send_from_directory(
+        directory=app.static_folder, 
+        path='app-debug.apk', 
+        as_attachment=True,
+        mimetype='application/vnd.android.package-archive'
+    )
 
 # 主函数
 @app.route('/api/generate_schedule', methods=['POST'])
