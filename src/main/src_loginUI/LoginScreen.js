@@ -12,6 +12,39 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // 新增：API登录函数
+  const handleApiLogin = async () => {
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch('http://8.138.161.200:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username.trim(),
+          password: password.trim()
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // 登录成功（假设API返回success字段）
+        if (data.message) {
+          navigation.replace('MainApp');
+        } else {
+          Alert.alert('登录失败', data.error || '用户名或密码错误');
+        }
+      } else {
+        Alert.alert('服务器错误', data.error || '登录请求失败');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleLogin = () => {
     // 验证输入不为空
     if(!username.trim() && !password.trim())
@@ -30,30 +63,34 @@ const LoginScreen = ({ navigation }) => {
 
     setIsLoading(true);
 
-    // 模拟网络请求延迟
-    setTimeout(() => {
-      setIsLoading(false);
+    // setTimeout(() => {
+    //   handleApiLogin(), 1000
+    // })
+    handleApiLogin();
+    // // 模拟网络请求延迟
+    // setTimeout(() => {
+    //   setIsLoading(false);
       
-      // 验证凭据
-      if (username === CORRECT_CREDENTIALS.username && 
-          password === CORRECT_CREDENTIALS.password) {
-        // 登录成功，导航到主界面
-        navigation.replace('MainApp');
-      } else {
-        // 登录失败，显示错误提示
-        Alert.alert(
-          '登录失败',
-          '密码错误，请重新输入密码',
-          [
-            { text: '确定', onPress: () => {
-                    setPassword('');
-                    setUsername('');
-                }
-            } // 清空密码输入框
-          ]
-        );
-      }
-    }, 1000);
+    //   // 验证凭据
+    //   if (username === CORRECT_CREDENTIALS.username && 
+    //       password === CORRECT_CREDENTIALS.password) {
+    //     // 登录成功，导航到主界面
+    //     navigation.replace('MainApp');
+    //   } else {
+    //     // 登录失败，显示错误提示
+    //     Alert.alert(
+    //       '登录失败',
+    //       '密码错误，请重新输入密码',
+    //       [
+    //         { text: '确定', onPress: () => {
+    //                 setPassword('');
+    //                 setUsername('');
+    //             }
+    //         } // 清空密码输入框
+    //       ]
+    //     );
+    //   }
+    // }, 1000);
   };
 
      
