@@ -38,10 +38,9 @@ def hello_message():
 
 @app.route('/download_apk', methods=['GET'])
 def download_apk():
-    # "static" 目录放你的 APK，文件名改成你的实际
     return send_from_directory('static', 'chrono_hive.apk', 
                               as_attachment=True, 
-                              mimetype='application/vnd.android.package-archive')
+                              mimetype='static/app-debug.apk')
 
 # 主函数
 @app.route('/api/generate_schedule', methods=['POST'])

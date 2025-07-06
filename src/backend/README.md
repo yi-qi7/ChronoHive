@@ -1,5 +1,6 @@
 # ChronoHive
 
+=w=.
 ChronoHive is a lightweight, scalable, and distributed framework for processing and analyzing time-series data. It provides a simple and intuitive interface for users to define and execute complex workflows, while also providing a robust set of tools for data collection, storage, and processing.
 
 ## Architecture
@@ -13,6 +14,10 @@ project-root/
 │       ├── Dockerfile
 │       ├── requirements.txt 
 ├── server/
+│   ├── templates/
+│       ├── index.html
+│   ├── static/
+│       ├── app-debug.apk
 │   ├── agents.py
 │   ├── app.py
 │   ├── db.py
@@ -20,7 +25,6 @@ project-root/
 │   ├── workflow.py
 │   ├── requirements.txt
 ├── docker-compose.yml
-├── LICENSE
 └── README.md
 
 ```
