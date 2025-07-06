@@ -1,0 +1,5 @@
+*.apk
+*.db
+*.sqlite
+*.sqlite3
+*.log
