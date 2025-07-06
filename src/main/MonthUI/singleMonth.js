@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Button, Modal, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Button, Modal, FlatList, TextInput, Alert } from 'react-native';
 import dayjs from 'dayjs';
 import isLeapYear from 'dayjs/plugin/isLeapYear';
 import { Switch } from 'react-native';
 import { mockLocalStorage } from './mockLocalStorage'; //测试用单例
-//import { scheduleTypeColors } from './mockLocalStorage';
-import { ScheduleColorMapper } from './scheduleTypeColorMapper' //测试用单例
-import {getTasksByDate} from './mockDeadlineStorage'; //测试用单例
-import ModeButton from './modeButton'
+import { ScheduleColorMapper } from './scheduleTypeColorMapper'; //测试用单例
+import { getTasksByDate, mockDeadlineStorage, MonthUI_addDeadline, MonthUI_removeDeadline } from './mockDeadlineStorage'; //测试用单例
+import ModeButton from './modeButton';
 
 dayjs.extend(isLeapYear);
 
@@ -17,12 +16,13 @@ class SingleMonth extends Component {
     super(props);
     this.state = {
       currentDate: props.date || dayjs(),
-
+      scheduleStorage: mockLocalStorage,
       scmapper: ScheduleColorMapper,
       isDeadlineMode: false, // 新增状态，用于切换模式
       showDeadlineModal: false, // 控制截止日期详情模态框的显示
       selectedDate: '', // 当前选中的日期
-      tasksForSelectedDate: [] // 当前选中日期的所有截止任务
+      tasksForSelectedDate: [], // 当前选中日期的所有截止任务
+      newTask: '' // 用于存储新任务的输入
     };
   }
 
@@ -39,7 +39,6 @@ class SingleMonth extends Component {
     return getTasksByDate(formattedDate).length;
   };
 
-
   // 生成日历数据
   generateCalendar = () => {
     const calendar = [];
@@ -51,8 +50,7 @@ class SingleMonth extends Component {
 
     // 添加上个月的空白天数
     for (let i = 0; i < firstDayOfWeek; i++) {
-      const prevDate = dayjs(`${year}-${month + 1}-01`)
-        .subtract(firstDayOfWeek - i, 'day');
+      const prevDate = dayjs(`${year}-${month + 1}-01`).subtract(firstDayOfWeek - i, 'day');
       calendar.push({
         date: prevDate,
         isCurrentMonth: false,
@@ -77,7 +75,7 @@ class SingleMonth extends Component {
 
   render() {
     const calendarData = this.generateCalendar();
-    const { scheduleMethods, isDeadlineMode, showDeadlineModal, selectedDate, tasksForSelectedDate } = this.state;
+    const { scheduleMethods, isDeadlineMode, showDeadlineModal, selectedDate, tasksForSelectedDate, newTask } = this.state;
     const isCurrentMonth = dayjs().isSame(this.state.currentDate, 'month');
     const { mode } = this.props;
 
@@ -92,7 +90,7 @@ class SingleMonth extends Component {
           styles.titleContainer,
           (mode === 'dark') && styles.darkTitleContainer,
           (mode === 'honeycomb') && styles.honeycombTitleContainer,
-          ]}>
+        ]}>
           <Text style={[
             styles.monthTitle,
             isCurrentMonth && styles.currentMonthTitle,
@@ -104,14 +102,14 @@ class SingleMonth extends Component {
             {this.state.currentDate.format('YYYY年MM月')}
           </Text>
           <View style={[
-          styles.switchContainer,
-          (mode === 'dark') && styles.darkSwitchContainer,
-          (mode === 'honeycomb') && styles.honeycombSwitchContainer,
+            styles.switchContainer,
+            (mode === 'dark') && styles.darkSwitchContainer,
+            (mode === 'honeycomb') && styles.honeycombSwitchContainer,
           ]}>
             <View style={[
-            styles.switchTextContainer,
-            (mode === 'dark') && styles.darkSwitchTextContainer,
-            (mode === 'honeycomb') && styles.honeycombSwitchTextContainer,
+              styles.switchTextContainer,
+              (mode === 'dark') && styles.darkSwitchTextContainer,
+              (mode === 'honeycomb') && styles.honeycombSwitchTextContainer,
             ]}>
               <Text style={[
                 styles.switchText,
@@ -120,23 +118,21 @@ class SingleMonth extends Component {
               ]}>日程模式</Text>
             </View>
             <Switch
-            value={isDeadlineMode}
-            onValueChange={(value) => this.setState({ isDeadlineMode: value })}
-            trackColor={{ false: (mode === 'simple')? '#ffffff':'#e0e0e0', 
-              true: 
-              (mode === 'dark')? '#56bacb' : 
-              ((mode === 'honeycomb')? '#ffd966' : '#87ceeb')
-            }}
-            thumbColor={isDeadlineMode ? 
-              ((mode === 'dark')? '#18b3c3' : 
-              ((mode === 'honeycomb')? '#FFA500' : '#00bfff')) : '#ffffff'}
-            //checkedChildren="开启"
-            //unCheckedChildren="关闭"
+              value={isDeadlineMode}
+              onValueChange={(value) => this.setState({ isDeadlineMode: value })}
+              trackColor={{ false: (mode === 'simple')? '#ffffff':'#e0e0e0', 
+                true: 
+                (mode === 'dark')? '#56bacb' : 
+                ((mode === 'honeycomb')? '#ffd966' : '#87ceeb')
+              }}
+              thumbColor={isDeadlineMode ? 
+                ((mode === 'dark')? '#18b3c3' : 
+                ((mode === 'honeycomb')? '#FFA500' : '#00bfff')) : '#ffffff'}
             />
             <View style={[
-            styles.switchTextContainer,
-            (mode === 'dark') && styles.darkSwitchTextContainer,
-            (mode === 'honeycomb') && styles.honeycombSwitchTextContainer,
+              styles.switchTextContainer,
+              (mode === 'dark') && styles.darkSwitchTextContainer,
+              (mode === 'honeycomb') && styles.honeycombSwitchTextContainer,
             ]}>
               <Text style={[
                 styles.switchText,
@@ -146,20 +142,19 @@ class SingleMonth extends Component {
             </View>
           </View>
         </View>
-        
 
         {/* 星期标题 */}
         <View style={[
           styles.weekdays,
           (mode === 'dark') && styles.darkWeekdays,
           (mode === 'honeycomb') && styles.honeycombWeekdays,
-          ]}>
+        ]}>
           {['日', '一', '二', '三', '四', '五', '六'].map((day, index) => (
             <Text key={index} style={[
               styles.weekdayText,
               (mode === 'dark') && styles.darkWeekdayText,
               (mode === 'honeycomb') && styles.honeycombWeekdayText,
-              ]}>
+            ]}>
               {day}
             </Text>
           ))}
@@ -232,8 +227,6 @@ class SingleMonth extends Component {
                           key={idx}
                           style={[
                             styles.scheduleMarker,
-                            /*{ backgroundColor: scheduleTypeColors[type] || '#cccccc' }*/
-                            /*{ backgroundColor: ScheduleColorMapper.getColor(type) || '#cccccc' }*/
                             { backgroundColor: this.state.scmapper.getColor(type) || '#cccccc' }
                           ]}
                         />
@@ -255,20 +248,44 @@ class SingleMonth extends Component {
             styles.modalContainer,
             (mode === 'dark') && styles.darkModalContainer,
             (mode === 'honeycomb') && styles.honeycombModalContainer,
-            ]}>
+          ]}>
             <View style={[
               styles.modalHeader,
               (mode === 'dark') && styles.darkModalHeader,
               (mode === 'honeycomb') && styles.honeycombModalHeader,
-              ]}>
+            ]}>
               <Text style={[
                 styles.modalTitle,
                 (mode === 'dark') && styles.darkModalTitle,
                 (mode === 'honeycomb') && styles.honeycombModalTitle,
-                ]}>{selectedDate} 的截止任务</Text>
+              ]}>{selectedDate} 的截止任务</Text>
               <ModeButton
                 title="关闭"
                 onPress={() => this.setState({ showDeadlineModal: false })}
+                buttonMode = {mode}
+              />
+            </View>
+            <View style={styles.addTaskContainer}>
+              <TextInput
+                style={[
+                  styles.newTaskInput,
+                  (mode === 'dark') && styles.darkNewTaskInput,
+                  (mode === 'honeycomb') && styles.honeycombNewTaskInput,
+                ]}
+                placeholder="输入新任务"
+                value={newTask}
+                onChangeText={(text) => this.setState({ newTask: text })}
+                allowFontScaling={true} // 允许字体缩放
+                autoCorrect={false} // 关闭自动纠错
+                keyboardType="default" // 默认键盘类型
+                //keyboardType="visible-password" // 使用 visible-password 类型以支持中文输入
+                //keyboardType="url"
+                returnKeyType="done" // 完成键
+                enablesReturnKeyAutomatically={true} // 自动启用完成键
+              />
+              <ModeButton
+                title="添加任务"
+                onPress={() => this.addTask(selectedDate, newTask)}
                 buttonMode = {mode}
               />
             </View>
@@ -286,17 +303,23 @@ class SingleMonth extends Component {
                     styles.modalItem,
                     (mode === 'dark') && styles.darkModalItem,
                     (mode === 'honeycomb') && styles.honeycombModalItem,
-                    ]}>
+                    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' } // 新增样式
+                  ]}>
                     <Text style={[
                       styles.modalItemText,
                       (mode === 'dark') && styles.darkModalItemText,
                       (mode === 'honeycomb') && styles.honeycombModalItemText,
-                      ]}>{item}</Text>
-                    <Text style={[
+                    ]}>{item}</Text>
+                    {/*<Text style={[
                       styles.modalItemDeadline,
                       (mode === 'dark') && styles.darkModalItemDeadline,
                       (mode === 'honeycomb') && styles.honeycombModalItemDeadline,
-                      ]}>截止日期：{selectedDate}</Text>
+                    ]}>截止日期：{selectedDate}</Text>*/}
+                    <ModeButton
+                      title="删除"
+                      onPress={() => this.confirmRemoveTask(selectedDate, item)}
+                      buttonMode = {mode}
+                    />
                   </View>
                 )}
                 keyExtractor={(item) => item}
@@ -321,7 +344,8 @@ class SingleMonth extends Component {
       this.setState({
         showDeadlineModal: true,
         selectedDate: formattedDate,
-        tasksForSelectedDate: tasksForDate
+        tasksForSelectedDate: tasksForDate,
+        newTask: ''
       });
     } else {
       // 日程模式：跳转到周视图
@@ -331,6 +355,46 @@ class SingleMonth extends Component {
         isDeadlineMode: this.state.isDeadlineMode
       });
     }
+  };
+
+  // 添加任务
+  addTask = (date, task) => {
+    if (task) {
+      MonthUI_addDeadline(date, task);
+      const tasks = getTasksByDate(date);
+      this.setState({
+        tasksForSelectedDate: tasks,
+        newTask: ''
+      });
+    }
+  };
+
+  // 确认删除任务
+  confirmRemoveTask = (date, task) => {
+    Alert.alert(
+      '确认删除',
+      '确定要删除此日程吗？',
+      [
+        {
+          text: '取消',
+          style: 'cancel',
+        },
+        {
+          text: '确定',
+          onPress: () => this.removeTask(date, task),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  // 删除任务
+  removeTask = (date, task) => {
+    MonthUI_removeDeadline(date, task);
+    const tasks = getTasksByDate(date);
+    this.setState({
+      tasksForSelectedDate: tasks
+    });
   };
 }
 
@@ -497,6 +561,7 @@ const styles = StyleSheet.create({
   },
   today: {
     borderColor: '#e74c3c', // 当天红框
+    //borderColor: '#ef4965', // 当天红框
     borderWidth: 4,
   },
   darkToday: {
@@ -582,7 +647,7 @@ const styles = StyleSheet.create({
     color: '#FF6F00', // 当前日文字琥珀色
   },
 
-   // 日程标记
+  // 日程标记
   scheduleMarkers: {
     flexDirection: 'row',
     width: '100%',
@@ -681,6 +746,26 @@ const styles = StyleSheet.create({
   honeycombModalItemDeadline: {
     color: '#FF6F00', // 琥珀色截止日期文字
   },
+  addTaskContainer: {
+    flexDirection: 'row',
+    marginBottom: 10
+  },
+  newTaskInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 5,
+    marginRight: 10
+  },
+  darkNewTaskInput: {
+    backgroundColor: '#222',
+    color: '#fff',
+    borderColor: '#555'
+  },
+  honeycombNewTaskInput: {
+    backgroundColor: '#FFF8E1',
+    borderColor: '#FFD7A6'
+  }
 });
 
 // --------------------- 导出组件及测试工具 --------------------- //
