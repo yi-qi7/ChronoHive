@@ -18,7 +18,7 @@ export default function GlobalMessageModal() {
       >
         <View style={styles.root}>
           <View style={styles.content}>
-            <Text style={{ marginBottom: 10 }}>{message}</Text>
+            <Text style={{ marginBottom: 10 }}>{message.message}</Text>
             <Button title="关闭" onPress={() => setVisible(false)} />
           </View>
         </View>
